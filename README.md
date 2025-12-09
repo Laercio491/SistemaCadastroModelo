@@ -63,7 +63,7 @@ cliente adm pré-cadastrado: adm / aaaa@gmail.com / a665a45920422f9d417e4867efdc
 
 1. **Clone o repositório**
    ```bash
-   git clone <url-do-repositorio>
+   git clone <https://github.com/Laercio491/SistemaCadastroModelo.git>
    cd "projeto_final"
    ```
 
