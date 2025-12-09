@@ -25,24 +25,31 @@ O projeto utiliza as seguintes bibliotecas NuGet:
 
 O sistema utiliza duas tabelas principais:
 
-### Tabela `generos`
-- `idgenero` (INT, AUTO_INCREMENT, PRIMARY KEY)
-- `genero` (VARCHAR(45))
-
-Gêneros pré-cadastrados: Rock, Metal, Pagode, Gospel, Funk
-
-### Tabela `bandas`
-- `idbandas` (INT, AUTO_INCREMENT, PRIMARY KEY)
+### Tabela `cliente`
+- `cod_cliente` (INT, AUTO_INCREMENT, PRIMARY KEY)
 - `nome` (VARCHAR(45))
-- `integrantes` (INT)
-- `ranking` (INT)
-- `fk_genero` (INT, FOREIGN KEY)
+- `email` (VARCHAR(45))
+- `senha` (VARCHAR(200))
+
+cliente adm pré-cadastrado: adm / aaaa@gmail.com / a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3
+
+### Tabela `produto`
+- `cod_produto` (INT, AUTO_INCREMENT, PRIMARY KEY)
+- `nome` (VARCHAR(100))
+- `tamanho` (INT)
+- `valor` (INT)
+- `idcliente` (INT, FOREIGN KEY)
 
 ### Stored Procedures
 
-- `sp_insereBanda` - Insere uma nova banda no banco
-- `sp_listaBandas` - Lista todas as bandas com seus gêneros
-- `sp_listaGeneros` - Lista todos os gêneros disponíveis
+- `sp_insereCliente` - Insere um novo cliente no banco
+- `sp_insereProduto` - Insere um novo produto no banco
+- `sp_listaCliente` - Lista todos os clientes
+- `sp_listaProdutos` - Lista todos os produtos que tem algum cliente comprando
+- `sp_removeCliente` - Remove o Cliente selecionado
+- `sp_removeProduto` - Remove o Produto selecionado
+- `sp_alteraCliente` - Altera o Clente selecionado
+- `sp_alteraProduto` - Altera o Produto selecionado
 
 ## ⚙️ Instalação e Configuração
 
@@ -57,7 +64,7 @@ Gêneros pré-cadastrados: Rock, Metal, Pagode, Gospel, Funk
 1. **Clone o repositório**
    ```bash
    git clone <url-do-repositorio>
-   cd "Semana 12 - Projeto CSharp - Modelo"
+   cd "projeto_final"
    ```
 
 2. **Configure o Banco de Dados**
@@ -68,14 +75,10 @@ Gêneros pré-cadastrados: Rock, Metal, Pagode, Gospel, Funk
    ```
 
 3. **Configure a String de Conexão**
-   - Abra o arquivo `App.config` no projeto SistemaCadastro
+   - Abra o arquivo `conectabanco.cs` no projeto SistemaCadastro
    - Atualize a string de conexão com suas credenciais do MySQL
    ```xml
-   <connectionStrings>
-     <add name="MySqlConnection" 
-          connectionString="Server=localhost;Database=cadastro;Uid=root;Pwd=sua_senha;" 
-          providerName="MySql.Data.MySqlClient"/>
-   </connectionStrings>
+    <!-- MySqlConnection conexao = new MySqlConnection("server=localhost;user id=root;password=1234;database=vista_chic;port=3307"); -->
    ```
 
 4. **Restaure os Pacotes NuGet**
@@ -87,12 +90,11 @@ Gêneros pré-cadastrados: Rock, Metal, Pagode, Gospel, Funk
 
 ## 🎯 Funcionalidades
 
-- ✅ **Cadastro de Bandas** - Adicione novas bandas com informações completas
-- 🔍 **Busca de Bandas** - Pesquise bandas cadastradas
-- 📝 **Alteração de Dados** - Edite informações de bandas existentes
-- 🗑️ **Remoção de Bandas** - Exclua registros do sistema
-- 🎵 **Gerenciamento de Gêneros** - Adicione novos gêneros musicais
-- 📊 **Visualização em Lista** - Veja todas as bandas cadastradas
+- ✅ **Cadastro de Clientes e Produtos** - Adicione novos CLientes e Produtos com informações completas
+- 🔍 **Busca de Clientes e Produtos** - Pesquise Clientes ou Produtos cadastradas
+- 📝 **Alteração de Dados** - Edite informações de Clientes ou Produtos existentes
+- 🗑️ **Remoção de Clientes e Produtos** - Exclua registros do sistema
+- 📊 **Visualização em Lista** - Veja todos os Clientes e Produtos cadastrados
 
 ## 📁 Estrutura do Projeto
 
@@ -113,8 +115,8 @@ SistemaCadastro/
 
 O sistema possui uma interface com navegação por abas:
 
-- **Aba Cadastro** - Formulário para inserir novas bandas
-- **Aba Busca** - Interface para pesquisar e visualizar bandas cadastradas
+- **Aba Cliente** - Inserção, Alteração, Busca e Exclusão referente aos Clientes
+- **Aba Produto** - Inserção, Alteração, Busca e Exclusão referente aos Produtos
 
 A navegação é facilitada por botões laterais com indicador visual de aba selecionada.
 

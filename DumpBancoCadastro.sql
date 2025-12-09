@@ -1,73 +1,106 @@
-DROP TABLE IF EXISTS `generos`;
+CREATE database if not EXISTS vista_chic;
+use vista_chic;
+CREATE TABLE IF NOT EXISTS cliente (
+            cod_cliente INT AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(45) NOT NULL,
+            email VARCHAR(45),
+            senha VARCHAR(200)
+        );
+        
 
-CREATE TABLE `generos` (
-  `idgenero` int NOT NULL AUTO_INCREMENT,
-  `genero` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idgenero`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-LOCK TABLES `generos` WRITE;
-
-INSERT INTO `generos` VALUES (1,'Rock'),(2,'Metal'),(3,'Pagode'),(4,'Gospel'),(5,'Funk');
-
-UNLOCK TABLES;
-
-DROP TABLE IF EXISTS `bandas`;
-
-CREATE TABLE `bandas` (
-  `idbandas` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(45) DEFAULT NULL,
-  `integrantes` int DEFAULT NULL,
-  `ranking` int DEFAULT NULL,
-  `fk_genero` int DEFAULT NULL,
-  PRIMARY KEY (`idbandas`),
-  KEY `genero_idx` (`fk_genero`),
-  CONSTRAINT `genero` FOREIGN KEY (`fk_genero`) REFERENCES `generos` (`idgenero`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
-LOCK TABLES `bandas` WRITE;
-
-INSERT INTO `bandas` VALUES (1,'Skank',5,1,1),(2,'Metallica',4,1,1);
-
-UNLOCK TABLES;
-
+INSERT INTO `cliente` VALUES (1,'adm','aaa@gmail.com',a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3);
+CREATE TABLE IF NOT EXISTS produto (
+            cod_produto INT AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(100) NOT NULL,
+            tamanho int not null,
+            valor INT NOT NULL,
+            idcliente int not null,
+            FOREIGN KEY(idcliente) REFERENCES cliente (cod_cliente)
+            );
+            
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insereBanda`(nome varchar(45), 
-                                   integrantes int, ranking int, genero int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insereCliente`(nome varchar(50), email varchar(20), senha varchar(50))
 BEGIN
-INSERT INTO `bandas`
+INSERT INTO `cliente`
 (`nome`,
-`integrantes`,
-`ranking`,
-`fk_genero`)
+`email`,
+`senha`)
 VALUES
 (nome,
-integrantes,
-ranking,
-genero);
+email,
+senha
+);
+END ;;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insereProduto`(nome varchar(50), tamanho int, valor int, idcliente int)
+BEGIN
+INSERT INTO `produto`
+(`nome`,
+`tamanho`,
+`valor`,
+`idcliente`)
+VALUES
+(nome,
+tamanho,
+valor,
+idcliente
+);
 END ;;
 DELIMITER ;
 
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listaBandas`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listaCliente`()
 BEGIN
      SELECT 
-        b.idbandas, 
-        b.nome, 
-        b.ranking, 
-        g.genero
-    FROM bandas b
-    INNER JOIN generos g 
-        ON g.idgenero = b.fk_genero;
+        c.cod_cliente, 
+        c.nome, 
+        c.email, 
+        p.nome
+    FROM cliente c
+    INNER JOIN produto p 
+        ON p.idcliente = c.cod_cliente;
 END ;;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listaProdutos`()
+BEGIN
+   select * from produto;
+END;;
+
 DELIMITER ;
 
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_listaGeneros`()
-BEGIN
-   select * from generos;
-END;;
+create procedure `sp_removeCliente`(idcliente int)
+Begin
+delete from cliente where cod_cliente = idcliente;
+end;;
+
+create procedure `sp_alteraCliente`(cod_cliente int, nome varchar(45), email varchar(45), senha int)
+Begin
+update `cliente` set 
+`nome`= nome,
+`email`= email,
+`senha`= senha
+where `cod_cliente`= cod_cliente;
+end;;
+
+create procedure `sp_removeProduto`(idproduto int)
+Begin
+delete from produto where cod_produto = idproduto;
+end;;
+
+create procedure `sp_alteraProduto`(cod_produto int, nome varchar(45), tamanho varchar(45), valor int, idcliente int)
+Begin
+update `produto` set 
+`nome`= nome,
+`tamanho`= tamanho,
+`valor`= valor,
+`idcliente`= idcliente
+where `cod_produto`= cod_produto;
+end;;
+
+
+create procedure `sp_consultaLogin`(usuario varchar(100), senha varchar(100))
+begin
+select *from cliente where cliente.nome = usuario and cliente.senha =senha;
+end;;
 DELIMITER ;
